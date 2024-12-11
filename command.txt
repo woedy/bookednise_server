@@ -1,0 +1,31 @@
+sudo apt update
+
+
+
+
+docker-compose build
+
+
+docker-compose run --rm bookednise_app
+docker-compose up
+
+docker exec -it bookednise_django_app sh
+
+sudo chattr -i mysite
+
+sudo rm -r mysite
+
+
+
+sudo docker volume rm $(sudo docker volume ls -q)
+sudo docker rm -f $(sudo docker ps -a -q)
+sudo docker rmi $(sudo docker images -q)
+
+
+         "lat": 5.6223458,
+                "lng": -0.17333937,
+
+
+5.622292400000000
+
+                -0.173371561000000

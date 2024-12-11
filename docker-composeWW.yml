@@ -1,0 +1,70 @@
+version: "3.8"
+services:
+
+  # Redis
+#  redis:
+#    image: redis:alpine
+#    container_name: bookednise_redis
+
+  # Database Postgres
+#  db:
+#    image: postgres
+#    volumes:
+#      - ./data/db:/var/lib/postgresql/data
+#    environment:
+#      - POSTGRES_DB=bookednise_postgres
+#      - POSTGRES_USER=bookednise_postgres
+#      - POSTGRES_PASSWORD=bookednise_postgres
+#    container_name: bookednise_postgres_db
+#    restart: unless-stopped
+
+  # Django Application
+  bookednise_app:
+    build: .
+    volumes:
+      - .:/bookednise_django
+      - ./static_cdn:/var/lib/static_cdn
+    ports:
+      - "4040:4040"
+    image: bookednise_app:django
+    container_name: bookednise_django_app
+    command: python manage.py runserver 0.0.0.0:4040
+#    depends_on:
+#      - db
+    restart: unless-stopped
+
+  # Celery Worker
+  celery:
+    restart: always
+    build:
+      context: .
+    command: celery -A bookednise_pro worker -l DEBUG
+    volumes:
+      - .:/bookednise_django
+    container_name: bookednise_celery
+    depends_on:
+#      - db
+#      - redis
+      - bookednise_app
+
+  # Celery Beat
+  celery-beat:
+    restart: always
+    build:
+      context: .
+    command: celery -A bookednise_pro beat -l DEBUG
+    volumes:
+      - .:/bookednise_django
+    container_name: bookednise_celery_beat
+    depends_on:
+#      - db
+#      - redis
+      - bookednise_app
+
+volumes:
+  static_cdn:
+
+#networks:
+#  default:
+#    external: true
+#    name: docker-nginx-proxy-manager

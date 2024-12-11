@@ -1,0 +1,65 @@
+# Django-specific
+*.log
+*.pot
+*.pyc
+__pycache__/
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+
+# Ignore media files (uploads) in the media directory
+/media/
+
+# Ignore collected static files
+/static_cdn/
+
+# Static files directory
+staticfiles/
+
+# Ignore CDN/media storage folder if used (adjust based on your actual setup)
+static_cdn/media_root/
+
+# Ignore other common files
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+dist/
+downloads/
+eggs/
+.lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+
+# Celery and environment settings
+celerybeat-schedule
+celerybeat.pid
+.env
+.venv
+env/
+venv/
+ENV/
+
+# IDE and OS-related
+.DS_Store
+/.idea

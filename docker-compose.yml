@@ -1,0 +1,46 @@
+version: "3.8"
+services:
+
+  # Django Application
+  bookednise_app:
+    build: .
+    volumes:
+      - .:/bookednise_django
+      - ./static_cdn:/var/lib/static_cdn  # Static files
+      - ./media:/bookednise_django/media  # Media files
+    ports:
+      - "4040:4040"
+    image: bookednise_app:django
+    container_name: bookednise_django_app
+    command: python manage.py runserver 0.0.0.0:4040
+    restart: unless-stopped
+
+  # Celery Worker
+  celery:
+    restart: always
+    build:
+      context: .
+    command: celery -A bookednise_pro worker -l DEBUG
+    volumes:
+      - .:/bookednise_django
+      - ./media:/bookednise_django/media  # Mount media here as well
+    container_name: bookednise_celery
+    depends_on:
+      - bookednise_app
+
+  # Celery Beat
+  celery-beat:
+    restart: always
+    build:
+      context: .
+    command: celery -A bookednise_pro beat -l DEBUG
+    volumes:
+      - .:/bookednise_django
+      - ./media:/bookednise_django/media  # Mount media here as well
+    container_name: bookednise_celery_beat
+    depends_on:
+      - bookednise_app
+
+volumes:
+  static_cdn:  # Volume for static files
+  media:  # Volume for media files
